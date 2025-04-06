@@ -17,6 +17,8 @@ export class PaintingAreaComponent {
   height = 400;
   isDown: boolean = false;
   isSelected = false;
+  steps: any = [];
+  undo: any = [];
 
   previewImage: string | ArrayBuffer | null | undefined = '';
 
@@ -57,7 +59,6 @@ export class PaintingAreaComponent {
     this.imageService.previewImage$.subscribe((img) => {
       console.log(img);
       this.previewImage = img;
-      console.log('PREVIEW IMAGE !!', this.previewImage);
     });
   }
 
@@ -92,8 +93,6 @@ export class PaintingAreaComponent {
       .subscribe((res: [MouseEvent, MouseEvent]) => {
         const rect = canvasEl.getBoundingClientRect();
 
-        console.log(res[0]);
-
         const prevPos = {
           x: res[0].clientX - rect.left,
           y: res[0].clientY - rect.top,
@@ -108,13 +107,21 @@ export class PaintingAreaComponent {
       });
   }
 
-  drawOnCanvas(
-    prevPos: { x: number; y: number },
-    currentPos: { x: number; y: number }
-  ) {
-    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
+  teste() {
+    const prevPos = {
+      x: 150,
+      y: 300,
+    };
+    const currentPos = {
+      x: 400,
+      y: 500,
+    };
 
+    console.log('test button');
+
+    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     const cx = canvasEl.getContext('2d');
+
     // incase the context is not set
     if (!cx) {
       return;
@@ -122,6 +129,8 @@ export class PaintingAreaComponent {
 
     // start our drawing path
     cx.beginPath();
+
+    console.log('context canvas', cx);
 
     // we're drawing lines so we need a previous position
     if (prevPos) {
@@ -133,19 +142,79 @@ export class PaintingAreaComponent {
 
       // strokes the current path with the styles we set earlier
       cx.stroke();
+
+      cx.closePath();
     }
   }
 
-  // adjustCanvasSize() {
-  //   const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
+  erase() {
+    const prevPos = {
+      x: 150,
+      y: 300,
+    };
+    const currentPos = {
+      x: 400,
+      y: 500,
+    };
 
-  //   const image = this.imageRef.nativeElement;
+    console.log('erase button');
 
-  //   canvasEl.width = image.naturalWidth;
-  //   canvasEl.height = image.naturalHeight;
+    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
+    const cx = canvasEl.getContext('2d');
 
-  //   // Adapta visualmente ao tamanho exibido
-  //   canvasEl.style.width = '100%';
-  //   canvasEl.style.height = '100%';
-  // }
+    if (!cx) {
+      return;
+    }
+
+    // Salva o estado atual do pincel
+    const previousStrokeStyle = cx.strokeStyle;
+    const previousLineWidth = cx.lineWidth;
+
+    // Modo "borracha"
+    cx.strokeStyle = '#ffffff'; // ou 'rgba(0,0,0,0)' para fundo transparente
+    cx.lineWidth = 5;
+
+    cx.beginPath();
+    cx.moveTo(prevPos.x, prevPos.y);
+    cx.lineTo(currentPos.x, currentPos.y);
+    cx.stroke();
+    cx.closePath();
+
+    // Restaura o estilo original do pincel
+    cx.strokeStyle = previousStrokeStyle;
+    cx.lineWidth = previousLineWidth;
+  }
+
+  drawOnCanvas(
+    prevPos: { x: number; y: number },
+    currentPos: { x: number; y: number }
+  ) {
+    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
+
+    const cx = canvasEl.getContext('2d');
+
+    // incase the context is not set
+    if (!cx) {
+      return;
+    }
+
+    // start our drawing path
+    cx.beginPath();
+
+    console.log('context canvas', cx);
+
+    // we're drawing lines so we need a previous position
+    if (prevPos) {
+      // sets the start point
+      cx.moveTo(prevPos.x, prevPos.y); // from
+
+      // draws a line from the start pos until the current position
+      cx.lineTo(currentPos.x, currentPos.y);
+
+      // strokes the current path with the styles we set earlier
+      cx.stroke();
+
+      cx.closePath();
+    }
+  }
 }
