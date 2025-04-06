@@ -35,4 +35,5 @@ app-upload-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  z-index: 100;
 }

@@ -5,6 +5,7 @@ import { DragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { PaintingAreaComponent } from './painting-area/painting-area.component';
 import { HeaderComponent } from './header/header.component';
 import { ColorSelectComponent } from './color-select/color-select.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import { ColorSelectComponent } from './color-select/color-select.component';
     PaintingAreaComponent,
     HeaderComponent,
     ColorSelectComponent,
+    MatExpansionModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
