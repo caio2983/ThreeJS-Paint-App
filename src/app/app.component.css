@@ -30,6 +30,9 @@ app-upload-form {
 
 .interface {
   background-color: #6d35a1;
-  width: 10%;
+  width: 20%;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

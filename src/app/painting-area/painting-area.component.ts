@@ -12,6 +12,7 @@ import {
 } from 'rxjs/operators';
 import { ImageServiceService } from '../../services/images/image-service.service';
 import { OnInit } from '@angular/core';
+import { BrushServiceService } from '../../services/brush/brush-service.service';
 
 @Component({
   selector: 'app-painting-area',
@@ -28,12 +29,16 @@ export class PaintingAreaComponent {
   undo: any = [];
 
   previewImage: string | ArrayBuffer | null | undefined = '';
+  brushColor: string | CanvasGradient | CanvasPattern = 'black';
 
   @ViewChild('canvas') public canvas!: ElementRef;
   @ViewChild('image', { static: false })
   imageRef!: ElementRef<HTMLImageElement>;
 
-  constructor(private imageService: ImageServiceService) {}
+  constructor(
+    private imageService: ImageServiceService,
+    private brushService: BrushServiceService
+  ) {}
 
   public ngAfterViewInit() {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
@@ -55,7 +60,7 @@ export class PaintingAreaComponent {
     if (cx) {
       cx.lineWidth = 3;
       cx.lineCap = 'round';
-      cx.strokeStyle = '#000';
+      cx.strokeStyle = this.brushColor;
     }
 
     // we'll implement this method to start capturing mouse events
@@ -64,9 +69,21 @@ export class PaintingAreaComponent {
 
   ngOnInit() {
     this.imageService.previewImage$.subscribe((img) => {
-      console.log(img);
       this.previewImage = img;
     });
+    this.brushService.brushColor$.subscribe((color) => {
+      this.brushColor = color;
+
+      const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
+      const cx = canvasEl.getContext('2d');
+      if (cx) {
+        cx.strokeStyle = color;
+      }
+    });
+  }
+
+  teste() {
+    console.log(this.brushColor);
   }
 
   captureEvents(canvasEl: HTMLCanvasElement) {
@@ -119,44 +136,6 @@ export class PaintingAreaComponent {
 
         this.drawOnCanvas(prevPos, currentPos);
       });
-  }
-
-  teste() {
-    const prevPos = {
-      x: 150,
-      y: 300,
-    };
-    const currentPos = {
-      x: 400,
-      y: 500,
-    };
-
-    console.log('test button');
-
-    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    const cx = canvasEl.getContext('2d');
-
-    // incase the context is not set
-    if (!cx) {
-      return;
-    }
-
-    // start our drawing path
-    cx.beginPath();
-
-    // we're drawing lines so we need a previous position
-    if (prevPos) {
-      // sets the start point
-      cx.moveTo(prevPos.x, prevPos.y); // from
-
-      // draws a line from the start pos until the current position
-      cx.lineTo(currentPos.x, currentPos.y);
-
-      // strokes the current path with the styles we set earlier
-      cx.stroke();
-
-      cx.closePath();
-    }
   }
 
   erase() {

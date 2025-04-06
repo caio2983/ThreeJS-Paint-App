@@ -1,0 +1,10 @@
+<div class="color-select">
+  <input
+    [(colorPicker)]="color"
+    [style.background]="color"
+    [cpSaveClickOutside]="true"
+    [cpToggle]="true"
+    cpDialogDisplay="inline"
+    (colorPickerChange)="handleColorChange()"
+  />
+</div>

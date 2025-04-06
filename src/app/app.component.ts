@@ -4,6 +4,7 @@ import { UploadFormComponent } from './upload-form/upload-form.component';
 import { DragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { PaintingAreaComponent } from './painting-area/painting-area.component';
 import { HeaderComponent } from './header/header.component';
+import { ColorSelectComponent } from './color-select/color-select.component';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { HeaderComponent } from './header/header.component';
     DragDropModule,
     PaintingAreaComponent,
     HeaderComponent,
+    ColorSelectComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

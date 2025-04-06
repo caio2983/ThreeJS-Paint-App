@@ -1,22 +1,9 @@
-<button (click)="teste()">Teste</button>
 <button (click)="erase()">Erase</button>
 
+<button (click)="teste()">Teste</button>
+
 <div class="canvas-container">
-  <img
-    [src]="previewImage"
-    alt="Imagem dinâmica"
-    class="background-image"
-    #image
-  />
+  <img [src]="previewImage" class="background-image" #image />
 
   <canvas #canvas class="canvass"></canvas>
-
-  <!-- <div class="bg-drag">
-    <div
-      class="draggable"
-      [cdkDragDisabled]="!isSelected"
-      cdkDrag
-      cdkDragBoundary=".bg-drag"
-    ></div>
-  </div> -->
 </div>

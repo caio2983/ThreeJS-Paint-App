@@ -1,0 +1,8 @@
+.color-select {
+  width: 100%;
+  height: 300px;
+  background-color: cornflowerblue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
