@@ -169,20 +169,18 @@ export class PaintingAreaComponent {
 
     const previousStrokeStyle = cx.strokeStyle;
     const previousLineWidth = cx.lineWidth;
+    const previousComposite = cx.globalCompositeOperation;
 
     console.log('PINCEL', { previousStrokeStyle, previousLineWidth });
 
-    cx.strokeStyle = '#ffffff'; // ou 'rgba(0,0,0,0)' para fundo transparente
-    cx.lineWidth = 5;
-
-    console.log('TESTEEEE', this.undo[this.undo.length - 1]);
-
-    let lastStroke = this.undo[this.undo.length - 1];
-    this.undo.pop();
+    cx.globalCompositeOperation = 'destination-out';
+    cx.strokeStyle = 'rgba(0,0,0,1)';
+    cx.lineWidth = 10;
+    const lastStroke = this.undo[this.undo.length - 1];
+    this.undo.pop(); // remove o último traço
     this.steps.pop();
-    let previousStrokes = this.undo.slice(0, this.undo.length - 1);
 
-    lastStroke.map((stroke: any) => {
+    lastStroke.forEach((stroke: any) => {
       cx.beginPath();
       cx.moveTo(stroke[0].x, stroke[0].y);
       cx.lineTo(stroke[1].x, stroke[1].y);
@@ -190,13 +188,17 @@ export class PaintingAreaComponent {
       cx.closePath();
     });
 
+    cx.globalCompositeOperation = previousComposite;
     cx.strokeStyle = previousStrokeStyle;
     cx.lineWidth = previousLineWidth;
 
-    console.log('PINCEL 2', { previousStrokeStyle, previousLineWidth });
+    console.log('PINCEL RESTAURADO', {
+      previousStrokeStyle,
+      previousLineWidth,
+    });
 
-    this.undo.map((strokes: any) => {
-      strokes.map((stroke: any) => {
+    this.undo.forEach((strokes: any) => {
+      strokes.forEach((stroke: any) => {
         cx.beginPath();
         cx.moveTo(stroke[0].x, stroke[0].y);
         cx.lineTo(stroke[1].x, stroke[1].y);
