@@ -13,10 +13,11 @@ import {
 import { ImageServiceService } from '../../services/images/image-service.service';
 import { OnInit } from '@angular/core';
 import { BrushServiceService } from '../../services/brush/brush-service.service';
+import { ThreeComponent } from '../three/three.component';
 
 @Component({
   selector: 'app-painting-area',
-  imports: [NgIf, DragDropModule, CdkDrag, NgStyle],
+  imports: [NgIf, DragDropModule, CdkDrag, NgStyle, ThreeComponent],
   templateUrl: './painting-area.component.html',
   styleUrl: './painting-area.component.css',
 })
