@@ -1,0 +1,35 @@
+.hero-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #b3b31d;
+  overflow: hidden;
+  display: flex;
+}
+
+.header-and-canvas {
+  width: 90vw;
+  height: 100%;
+  background-color: rgb(24, 84, 137);
+  display: flex;
+  flex-direction: column;
+}
+
+app-header {
+  width: 100%;
+  height: 15%;
+}
+
+app-painting-area {
+  height: 100%;
+}
+
+app-upload-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.interface {
+  background-color: #6d35a1;
+  width: 10%;
+  height: 100vh;
+}
