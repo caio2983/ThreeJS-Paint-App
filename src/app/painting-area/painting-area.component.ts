@@ -139,6 +139,7 @@ export class PaintingAreaComponent {
   }
 
   erase() {
+    // This is the undo function
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     const cx = canvasEl.getContext('2d');
 
