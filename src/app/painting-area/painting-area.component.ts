@@ -2,7 +2,14 @@ import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 import { NgIf, NgStyle } from '@angular/common';
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { fromEvent } from 'rxjs';
-import { switchMap, takeUntil, pairwise, filter } from 'rxjs/operators';
+import {
+  switchMap,
+  takeUntil,
+  pairwise,
+  filter,
+  finalize,
+  last,
+} from 'rxjs/operators';
 import { ImageServiceService } from '../../services/images/image-service.service';
 import { OnInit } from '@angular/core';
 
@@ -86,6 +93,11 @@ export class PaintingAreaComponent {
 
             // pairwise lets us get the previous value to draw a line from
             // the previous point to the current point
+            finalize(() => {
+              this.undo.push(this.steps);
+              console.log('Test undo', this.undo);
+              this.steps = [];
+            }),
             pairwise()
           );
         })
@@ -102,6 +114,8 @@ export class PaintingAreaComponent {
           x: res[1].clientX - rect.left,
           y: res[1].clientY - rect.top,
         };
+
+        this.steps.push([prevPos, currentPos]);
 
         this.drawOnCanvas(prevPos, currentPos);
       });
@@ -130,8 +144,6 @@ export class PaintingAreaComponent {
     // start our drawing path
     cx.beginPath();
 
-    console.log('context canvas', cx);
-
     // we're drawing lines so we need a previous position
     if (prevPos) {
       // sets the start point
@@ -148,17 +160,6 @@ export class PaintingAreaComponent {
   }
 
   erase() {
-    const prevPos = {
-      x: 150,
-      y: 300,
-    };
-    const currentPos = {
-      x: 400,
-      y: 500,
-    };
-
-    console.log('erase button');
-
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     const cx = canvasEl.getContext('2d');
 
@@ -166,21 +167,24 @@ export class PaintingAreaComponent {
       return;
     }
 
-    // Salva o estado atual do pincel
     const previousStrokeStyle = cx.strokeStyle;
     const previousLineWidth = cx.lineWidth;
 
-    // Modo "borracha"
     cx.strokeStyle = '#ffffff'; // ou 'rgba(0,0,0,0)' para fundo transparente
     cx.lineWidth = 5;
 
-    cx.beginPath();
-    cx.moveTo(prevPos.x, prevPos.y);
-    cx.lineTo(currentPos.x, currentPos.y);
-    cx.stroke();
-    cx.closePath();
+    console.log('TESTEEEE', this.undo[this.undo.length - 1]);
 
-    // Restaura o estilo original do pincel
+    const lastStroke = this.undo[this.undo.length - 1];
+
+    lastStroke.map((stroke: any) => {
+      cx.beginPath();
+      cx.moveTo(stroke[0].x, stroke[0].y);
+      cx.lineTo(stroke[1].x, stroke[1].y);
+      cx.stroke();
+      cx.closePath();
+    });
+
     cx.strokeStyle = previousStrokeStyle;
     cx.lineWidth = previousLineWidth;
   }
@@ -200,8 +204,6 @@ export class PaintingAreaComponent {
 
     // start our drawing path
     cx.beginPath();
-
-    console.log('context canvas', cx);
 
     // we're drawing lines so we need a previous position
     if (prevPos) {
