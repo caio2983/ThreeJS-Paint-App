@@ -22,6 +22,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   private renderer!: THREE.WebGLRenderer;
   private controls!: OrbitControls;
   private animationId!: number;
+  private texture!: THREE.CanvasTexture;
 
   ngAfterViewInit(): void {
     this.initThree();
@@ -37,7 +38,6 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     const canvas = this.canvasRef.nativeElement;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xffffff);
 
     const aspect = window.innerWidth / window.innerHeight;
     this.camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
@@ -50,15 +50,32 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.update();
 
-    const light = new THREE.PointLight(0xffffff, 1);
+    const light = new THREE.PointLight(0xffffff, 4);
     light.position.set(1, 1, 1);
     this.scene.add(light);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     this.scene.add(ambientLight);
 
+    const textureCanvas = document.createElement('canvas');
+    textureCanvas.width = 512;
+    textureCanvas.height = 512;
+    const ctx = textureCanvas.getContext('2d')!;
+    ctx.fillStyle = '#00FFCC';
+    ctx.fillRect(0, 0, textureCanvas.width, textureCanvas.height);
+
+    ctx.fillStyle = 'black';
+    ctx.font = '48px sans-serif';
+    ctx.fillText('sphere !!!', 150, 256);
+
+    this.texture = new THREE.CanvasTexture(textureCanvas);
+    this.texture.magFilter = THREE.NearestFilter;
+    this.texture.minFilter = THREE.NearestFilter;
+
     const geometry = new THREE.SphereGeometry(1, 32, 32);
-    const material = new THREE.MeshStandardMaterial({ color: 'blue' });
+    const material = new THREE.MeshStandardMaterial({
+      map: this.texture,
+    });
     const sphere = new THREE.Mesh(geometry, material);
     this.scene.add(sphere);
   }
