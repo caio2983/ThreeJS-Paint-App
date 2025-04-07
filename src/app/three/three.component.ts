@@ -4,9 +4,11 @@ import {
   ElementRef,
   ViewChild,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { ThreeServiceService } from '../../services/three/three-service.service';
 
 @Component({
   selector: 'app-three',
@@ -23,6 +25,9 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   private controls!: OrbitControls;
   private animationId!: number;
   private texture!: THREE.CanvasTexture;
+  OrbitControls!: boolean;
+
+  constructor(private threeService: ThreeServiceService) {}
 
   ngAfterViewInit(): void {
     this.initThree();
@@ -32,6 +37,28 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     cancelAnimationFrame(this.animationId);
     this.renderer.dispose();
+  }
+
+  ngOnInit(): void {
+    this.threeService.OrbitControls$.subscribe((OrbitControlss: boolean) => {
+      this.OrbitControls = OrbitControlss;
+
+      if (this.OrbitControls) {
+        // turn on orbit controls
+        if (!this.controls) {
+          this.controls = new OrbitControls(
+            this.camera,
+            this.renderer.domElement
+          );
+        }
+      } else {
+        // turn off orbit controls
+        if (this.controls) {
+          this.controls.dispose();
+          this.controls = null as any;
+        }
+      }
+    });
   }
 
   private initThree(): void {
@@ -47,6 +74,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(0xffffff);
 
+    // starts with orbit controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.update();
 

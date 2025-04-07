@@ -2,6 +2,7 @@ import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 import { NgIf, NgStyle } from '@angular/common';
 import { Component } from '@angular/core';
 import { ImageServiceService } from '../../services/images/image-service.service';
+import { ThreeServiceService } from '../../services/three/three-service.service';
 
 @Component({
   selector: 'app-upload-form',
@@ -16,14 +17,17 @@ export class UploadFormComponent {
   fileName = '';
   fileSize = '';
   previewImage: string | ArrayBuffer | null | undefined = ''; // Send this to painting-area
-
+  OrbitControls: boolean = true;
   uploadStatus: number | undefined;
   isDown: boolean = false;
   isSelected = false;
   width = 400;
   height = 400;
 
-  constructor(private imageService: ImageServiceService) {}
+  constructor(
+    private imageService: ImageServiceService,
+    private ThreeService: ThreeServiceService
+  ) {}
 
   onFileSelected(event: any, inputFile: File | null) {
     this.outputBoxVisible = false;
@@ -94,5 +98,10 @@ export class UploadFormComponent {
   handleMoveClick() {
     this.isSelected = !this.isSelected;
     console.log(this.isSelected);
+  }
+
+  handleOrbitControls() {
+    this.OrbitControls = !this.OrbitControls;
+    this.ThreeService.toggleOrbitControls(this.OrbitControls);
   }
 }

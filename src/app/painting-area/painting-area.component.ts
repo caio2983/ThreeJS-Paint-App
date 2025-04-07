@@ -14,6 +14,7 @@ import { ImageServiceService } from '../../services/images/image-service.service
 import { OnInit } from '@angular/core';
 import { BrushServiceService } from '../../services/brush/brush-service.service';
 import { ThreeComponent } from '../three/three.component';
+import { ThreeServiceService } from '../../services/three/three-service.service';
 
 @Component({
   selector: 'app-painting-area',
