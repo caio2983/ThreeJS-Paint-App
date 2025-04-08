@@ -201,6 +201,18 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   ngOnInit(): void {
     console.log('teste plane', new THREE.PlaneGeometry());
 
+    this.threeService.Solid$.subscribe((solid: any) => {
+      this.geometryType = solid;
+
+      const newGeometry = this.createGeometry(this.geometryType);
+
+      this.geometry.dispose();
+
+      this.geometry = newGeometry;
+
+      this.mesh.geometry = this.geometry;
+    });
+
     this.threeService.Animation$.subscribe((Animation: boolean) => {
       this.animation = Animation;
       console.log('teste animation', this.animation);

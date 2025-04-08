@@ -1,5 +1,5 @@
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
-import { NgIf, NgStyle } from '@angular/common';
+import { NgIf, NgStyle, NgFor } from '@angular/common';
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { ImageServiceService } from '../../services/images/image-service.service';
@@ -7,7 +7,7 @@ import { ThreeServiceService } from '../../services/three/three-service.service'
 
 @Component({
   selector: 'app-upload-form',
-  imports: [NgIf, DragDropModule, CdkDrag, NgStyle],
+  imports: [NgIf, DragDropModule, CdkDrag, NgStyle, NgFor],
   templateUrl: './upload-form.component.html',
   styleUrl: './upload-form.component.css',
 })
@@ -25,6 +25,13 @@ export class UploadFormComponent {
   isSelected = false;
   width = 400;
   height = 400;
+
+  solids = [
+    { type: 'sphere', label: 'Sphere' },
+    { type: 'plane', label: 'Plane' },
+    { type: 'oct', label: 'Octaedro' },
+    { type: 'box', label: 'Box' },
+  ];
 
   constructor(
     private imageService: ImageServiceService,
@@ -101,5 +108,9 @@ export class UploadFormComponent {
   handleToggleAnimation() {
     this.animation = !this.animation;
     this.ThreeService.toggleAnimation(this.animation);
+  }
+
+  changeSolid(solid: string) {
+    this.ThreeService.changeSolidType(solid);
   }
 }

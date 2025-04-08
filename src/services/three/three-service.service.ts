@@ -11,6 +11,9 @@ export class ThreeServiceService {
   private Animation = new BehaviorSubject<boolean>(true);
   Animation$ = this.Animation.asObservable();
 
+  private Solid = new BehaviorSubject<string>('sphere');
+  Solid$ = this.Solid.asObservable();
+
   toggleOrbitControls(OrbitControls: boolean) {
     this.OrbitControls.next(OrbitControls);
     console.log('obs', this.OrbitControls);
@@ -18,6 +21,11 @@ export class ThreeServiceService {
 
   toggleAnimation(animation: boolean) {
     this.Animation.next(animation);
+  }
+
+  changeSolidType(solid: string) {
+    this.Solid.next(solid);
+    console.log('changed solid: ', solid);
   }
 
   constructor() {}
