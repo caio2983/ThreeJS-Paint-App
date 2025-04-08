@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UploadFormComponent } from './upload-form/upload-form.component';
 import { DragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { PaintingAreaComponent } from './painting-area/painting-area.component';
 
 import { ColorSelectComponent } from './color-select/color-select.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { ThreeComponent } from './three/three.component';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +13,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     RouterOutlet,
     UploadFormComponent,
     DragDropModule,
-    PaintingAreaComponent,
-
+    ThreeComponent,
     ColorSelectComponent,
     MatExpansionModule,
   ],
