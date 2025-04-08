@@ -11,10 +11,10 @@ import { BrushServiceService } from '../../services/brush/brush-service.service'
 export class ColorSelectComponent {
   color = '';
 
-  constructor(private brush: BrushServiceService) {}
+  constructor(private brushService: BrushServiceService) {}
 
   handleColorChange() {
-    this.brush.setBrushColor(this.color);
+    this.brushService.setBrushColor(this.color);
     console.log('new color', this.color);
   }
 }

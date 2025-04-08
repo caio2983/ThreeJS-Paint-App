@@ -18,6 +18,7 @@ import {
   finalize,
   last,
 } from 'rxjs/operators';
+import { BrushServiceService } from '../../services/brush/brush-service.service';
 
 @Component({
   selector: 'app-three',
@@ -39,8 +40,12 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   private raycaster = new THREE.Raycaster();
   private pointer = new THREE.Vector2();
   private mesh!: THREE.Mesh;
+  private brushColor: string = 'black';
 
-  constructor(private threeService: ThreeServiceService) {}
+  constructor(
+    private threeService: ThreeServiceService,
+    private brushService: BrushServiceService
+  ) {}
 
   ngAfterViewInit(): void {
     this.OrbitControls = false;
@@ -166,6 +171,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
 
       // draws a line from the start pos until the current position
       cx.lineTo(currentPos.x, currentPos.y);
+      cx.strokeStyle = this.brushColor;
 
       // strokes the current path with the styles we set earlier
       cx.stroke();
@@ -201,6 +207,11 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
           this.controls = null as any;
         }
       }
+    });
+
+    this.brushService.brushColor$.subscribe((color: string) => {
+      this.brushColor = color;
+      console.log('cor setada', this.brushColor);
     });
   }
 
@@ -266,10 +277,6 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.scene.add(sphere);
 
     const canvasEl = this.renderer.domElement;
-
-    // fromEvent<MouseEvent>(canvasEl, 'mousedown').subscribe(() => {
-    //   console.log('mousedown na cena 3D!');
-    // });
 
     this.captureEvents(canvasEl);
 
