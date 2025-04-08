@@ -8,9 +8,16 @@ export class ThreeServiceService {
   private OrbitControls = new BehaviorSubject<boolean>(false);
   OrbitControls$ = this.OrbitControls.asObservable();
 
+  private Animation = new BehaviorSubject<boolean>(true);
+  Animation$ = this.Animation.asObservable();
+
   toggleOrbitControls(OrbitControls: boolean) {
     this.OrbitControls.next(OrbitControls);
     console.log('obs', this.OrbitControls);
+  }
+
+  toggleAnimation(animation: boolean) {
+    this.Animation.next(animation);
   }
 
   constructor() {}

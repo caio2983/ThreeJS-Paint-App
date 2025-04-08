@@ -29,7 +29,7 @@ import { BrushServiceService } from '../../services/brush/brush-service.service'
 })
 export class ThreeComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
-  @Input() geometryType: 'sphere' | 'plane' | 'box' = 'sphere';
+  @Input() geometryType: 'sphere' | 'plane' | 'box' | 'ring' = 'sphere';
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -39,6 +39,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   geometry = this.createGeometry(this.geometryType);
   private texture!: THREE.CanvasTexture;
   OrbitControls: boolean = false;
+  animation: boolean = true;
   private newCanvas!: HTMLCanvasElement;
   private raycaster = new THREE.Raycaster();
   private pointer = new THREE.Vector2();
@@ -193,6 +194,13 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('teste plane', new THREE.PlaneGeometry());
+
+    this.threeService.Animation$.subscribe((Animation: boolean) => {
+      this.animation = Animation;
+      console.log('teste animation', this.animation);
+    });
+
     this.threeService.OrbitControls$.subscribe((OrbitControlss: boolean) => {
       this.OrbitControls = OrbitControlss;
       console.log('ligou orbit', this.OrbitControls);
@@ -273,14 +281,23 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.texture.magFilter = THREE.NearestFilter;
     this.texture.minFilter = THREE.NearestFilter;
 
+    let material: THREE.MeshStandardMaterial;
+
+    if (this.geometryType === 'plane' || this.geometryType === 'ring') {
+      material = new THREE.MeshStandardMaterial({
+        map: this.texture,
+        side: THREE.DoubleSide,
+      });
+    } else {
+      material = new THREE.MeshStandardMaterial({
+        map: this.texture,
+      });
+    }
     const geometry = this.createGeometry(this.geometryType);
-    const material = new THREE.MeshStandardMaterial({
-      map: this.texture,
-    });
-    const sphere = new THREE.Mesh(geometry, material);
+
     this.mesh = new THREE.Mesh(geometry, material);
 
-    this.scene.add(sphere);
+    this.scene.add(this.mesh);
 
     const canvasEl = this.renderer.domElement;
 
@@ -295,6 +312,11 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.controls?.update();
     this.texture.needsUpdate = true;
 
+    if (this.animation) {
+      this.mesh.rotation.x += 0.01;
+      this.mesh.rotation.y += 0.01;
+    }
+
     this.renderer.render(this.scene, this.camera);
   };
 
@@ -303,9 +325,11 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
       case 'sphere':
         return new THREE.SphereGeometry(1, 32, 32);
       case 'plane':
-        return new THREE.PlaneGeometry(5, 5);
+        return new THREE.PlaneGeometry(2, 2);
       case 'box':
         return new THREE.BoxGeometry(1, 1, 1);
+      case 'ring':
+        return new THREE.RingGeometry(0.8, 1, 32);
       default:
         console.warn(
           `Geometria desconhecida: ${type}, usando Sphere por padrão`

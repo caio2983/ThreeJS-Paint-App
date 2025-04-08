@@ -19,6 +19,7 @@ export class UploadFormComponent {
   fileSize = '';
   previewImage: string | ArrayBuffer | null | undefined = ''; // Send this to painting-area
   OrbitControls: boolean = false;
+  animation: boolean = true;
   uploadStatus: number | undefined;
   isDown: boolean = false;
   isSelected = false;
@@ -95,5 +96,10 @@ export class UploadFormComponent {
     this.OrbitControls = !this.OrbitControls;
     console.log('orbitControls true/false', this.OrbitControls);
     this.ThreeService.toggleOrbitControls(this.OrbitControls);
+  }
+
+  handleToggleAnimation() {
+    this.animation = !this.animation;
+    this.ThreeService.toggleAnimation(this.animation);
   }
 }
