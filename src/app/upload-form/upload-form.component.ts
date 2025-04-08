@@ -83,11 +83,6 @@ export class UploadFormComponent {
     }
   }
 
-  handleDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
   handleDrop(event: DragEvent) {
     event.preventDefault();
     if (event.dataTransfer) {
@@ -96,20 +91,9 @@ export class UploadFormComponent {
     }
   }
 
-  handleMoveClick() {
-    this.isSelected = !this.isSelected;
-    console.log(this.isSelected);
-  }
-
   handleOrbitControls() {
     this.OrbitControls = !this.OrbitControls;
     console.log('orbitControls true/false', this.OrbitControls);
     this.ThreeService.toggleOrbitControls(this.OrbitControls);
   }
-
-  // ngOnInit(): void {
-  //   console.log('testeeee');
-  //   this.OrbitControls = false;
-  //   this.handleOrbitControls();
-  // }
 }

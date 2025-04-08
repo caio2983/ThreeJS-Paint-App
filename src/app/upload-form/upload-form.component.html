@@ -1,11 +1,7 @@
 <form class="upload-form">
   <h1>Upload File</h1>
 
-  <label
-    for="file"
-    (dragover)="handleDragOver($event)"
-    (drop)="handleDrop($event)"
-  >
+  <label for="file">
     <i class="ph ph-upload"></i>
 
     <span>
@@ -44,15 +40,5 @@
 </form>
 
 <div class="buttons">
-  <button
-    (click)="handleMoveClick()"
-    class="tool-button"
-    [ngStyle]="{ 'background-color': isSelected ? 'purple' : 'gray' }"
-  >
-    Move
-  </button>
-
-  <button class="tool-button">Paint</button>
-
   <button (click)="handleOrbitControls()">Toggle Orbit Controls</button>
 </div>
