@@ -5,6 +5,7 @@ import {
   ViewChild,
   OnDestroy,
   OnInit,
+  Input,
 } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -28,12 +29,14 @@ import { BrushServiceService } from '../../services/brush/brush-service.service'
 })
 export class ThreeComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+  @Input() geometryType: 'sphere' | 'plane' | 'box' = 'sphere';
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   private controls!: OrbitControls;
   private animationId!: number;
+  geometry = this.createGeometry(this.geometryType);
   private texture!: THREE.CanvasTexture;
   OrbitControls: boolean = false;
   private newCanvas!: HTMLCanvasElement;
@@ -270,7 +273,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.texture.magFilter = THREE.NearestFilter;
     this.texture.minFilter = THREE.NearestFilter;
 
-    const geometry = new THREE.SphereGeometry(1, 32, 32);
+    const geometry = this.createGeometry(this.geometryType);
     const material = new THREE.MeshStandardMaterial({
       map: this.texture,
     });
@@ -294,4 +297,20 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
 
     this.renderer.render(this.scene, this.camera);
   };
+
+  createGeometry(type: string): THREE.BufferGeometry {
+    switch (type) {
+      case 'sphere':
+        return new THREE.SphereGeometry(1, 32, 32);
+      case 'plane':
+        return new THREE.PlaneGeometry(5, 5);
+      case 'box':
+        return new THREE.BoxGeometry(1, 1, 1);
+      default:
+        console.warn(
+          `Geometria desconhecida: ${type}, usando Sphere por padrão`
+        );
+        return new THREE.SphereGeometry(1, 32, 32);
+    }
+  }
 }
