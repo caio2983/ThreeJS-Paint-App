@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class ThreeServiceService {
-  private OrbitControls = new BehaviorSubject<boolean>(true);
+  private OrbitControls = new BehaviorSubject<boolean>(false);
   OrbitControls$ = this.OrbitControls.asObservable();
 
   toggleOrbitControls(OrbitControls: boolean) {

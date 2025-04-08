@@ -18,7 +18,7 @@ export class UploadFormComponent {
   fileName = '';
   fileSize = '';
   previewImage: string | ArrayBuffer | null | undefined = ''; // Send this to painting-area
-  OrbitControls: boolean = true;
+  OrbitControls: boolean = false;
   uploadStatus: number | undefined;
   isDown: boolean = false;
   isSelected = false;
@@ -103,7 +103,7 @@ export class UploadFormComponent {
 
   handleOrbitControls() {
     this.OrbitControls = !this.OrbitControls;
-    console.log('orbit on/off', this.OrbitControls);
+    console.log('orbitControls true/false', this.OrbitControls);
     this.ThreeService.toggleOrbitControls(this.OrbitControls);
   }
 

@@ -35,7 +35,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   private controls!: OrbitControls;
   private animationId!: number;
   private texture!: THREE.CanvasTexture;
-  OrbitControls!: boolean;
+  OrbitControls: boolean = false;
   private newCanvas!: HTMLCanvasElement;
   private raycaster = new THREE.Raycaster();
   private pointer = new THREE.Vector2();
@@ -190,23 +190,31 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.threeService.OrbitControls$.subscribe((OrbitControlss: boolean) => {
       this.OrbitControls = OrbitControlss;
+      console.log('ligou orbit', this.OrbitControls);
       if (this.OrbitControls) {
+        console.log('teste 1,5');
         // turn on orbit controls
-        if (!this.controls) {
-          this.controls = new OrbitControls(
-            this.camera,
-            this.renderer.domElement
-          );
-          this.OrbitControls = true;
-          this.controls.enabled = true;
-        }
+
+        this.controls = new OrbitControls(
+          this.camera,
+          this.renderer.domElement
+        );
+        console.log('teste 2');
+
+        this.controls.enabled = true;
+        this.controls.update();
       } else {
         // turn off orbit controls
+
         if (this.controls) {
-          this.controls.dispose();
-          this.controls = null as any;
+          this.controls.enabled = false;
+          console.log('teste 3');
         }
       }
+
+      console.log(this.OrbitControls, this.controls, 'testeee');
+
+      return;
     });
 
     this.brushService.brushColor$.subscribe((color: string) => {
@@ -248,11 +256,11 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.controls.enabled = false;
 
     // (Opcional) Desliga funcionalidades específicas, se quiser controle mais granular:
-    this.controls.enableRotate = false;
-    this.controls.enableZoom = false;
-    this.controls.enablePan = false;
-    this.controls.enabled = this.OrbitControls;
-    this.controls.update();
+    // this.controls.enableRotate = false;
+    // this.controls.enableZoom = false;
+    // this.controls.enablePan = false;
+    // this.controls.enabled = this.OrbitControls;
+    // this.controls.update();
 
     const light = new THREE.PointLight(0xffffff, 4);
     light.position.set(1, 1, 1);
