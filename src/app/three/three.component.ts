@@ -36,6 +36,9 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   private texture!: THREE.CanvasTexture;
   OrbitControls!: boolean;
   private newCanvas!: HTMLCanvasElement;
+  private raycaster = new THREE.Raycaster();
+  private pointer = new THREE.Vector2();
+  private mesh!: THREE.Mesh;
 
   constructor(private threeService: ThreeServiceService) {}
 
@@ -95,29 +98,48 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
           );
         })
       )
-      .subscribe((res: [MouseEvent, MouseEvent]) => {
-        const rendererCanvas = this.renderer.domElement;
+      .subscribe(([eventPrev, eventCurr]) => {
+        const uv1 = this.getUvFromMouse(eventPrev);
+        const uv2 = this.getUvFromMouse(eventCurr);
 
-        const prevPos = {
-          x:
-            (res[0].clientX / rendererCanvas.clientWidth) *
-            this.newCanvas.width,
-          y:
-            (res[0].clientY / rendererCanvas.clientHeight) *
-            this.newCanvas.height,
-        };
+        if (uv1 && uv2) {
+          const prevPos = {
+            x: uv1.x * this.newCanvas.width,
+            y: (1 - uv1.y) * this.newCanvas.height, // y invertido
+          };
 
-        const currentPos = {
-          x:
-            (res[1].clientX / rendererCanvas.clientWidth) *
-            this.newCanvas.width,
-          y:
-            (res[1].clientY / rendererCanvas.clientHeight) *
-            this.newCanvas.height,
-        };
+          const currPos = {
+            x: uv2.x * this.newCanvas.width,
+            y: (1 - uv2.y) * this.newCanvas.height,
+          };
 
-        this.drawOnCanvas(prevPos, currentPos);
+          this.drawOnCanvas(prevPos, currPos);
+        }
       });
+  }
+
+  getUvFromMouse(event: MouseEvent): THREE.Vector2 | null {
+    // this.renderer.domElement is the <canvas> element
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    console.log('rect', rect);
+
+    // event.clientX - rect.left means the relative position of mouse x's in the canvas
+    // *2-1 , *2+1 convert the mouse click's coordinates to NDC coordinates (normalized device coordinates)
+    // why use NDC ? because different devices have differente screen sizes , and NDC maps different mouse coordinates
+    // from different screen sizes into x : [-1,+1] and y: [-1,+1]
+
+    this.pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    this.pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    // raytracing then uses the NDC to create the traces
+    this.raycaster.setFromCamera(this.pointer, this.camera);
+    const intersects = this.raycaster.intersectObject(this.mesh);
+
+    if (intersects.length > 0 && intersects[0].uv) {
+      return intersects[0].uv.clone();
+    }
+
+    return null;
   }
 
   drawOnCanvas(
@@ -190,7 +212,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     ctx.fillRect(0, 0, textureCanvas.width, textureCanvas.height);
     ctx.fillStyle = 'black';
     ctx.font = '48px sans-serif';
-    ctx.fillText('sphere !!!', 150, 256);
+    // ctx.fillText('sphere !!!', 150, 256);
 
     return textureCanvas;
   }
@@ -230,6 +252,8 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
       map: this.texture,
     });
     const sphere = new THREE.Mesh(geometry, material);
+    this.mesh = new THREE.Mesh(geometry, material);
+
     this.scene.add(sphere);
 
     const canvasEl = this.renderer.domElement;
@@ -247,6 +271,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.animationId = requestAnimationFrame(this.animate);
 
     this.controls?.update();
+    this.texture.needsUpdate = true;
 
     this.renderer.render(this.scene, this.camera);
   };
