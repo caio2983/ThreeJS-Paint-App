@@ -1,5 +1,6 @@
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 import { NgIf, NgStyle } from '@angular/common';
+import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { ImageServiceService } from '../../services/images/image-service.service';
 import { ThreeServiceService } from '../../services/three/three-service.service';
@@ -102,6 +103,13 @@ export class UploadFormComponent {
 
   handleOrbitControls() {
     this.OrbitControls = !this.OrbitControls;
+    console.log('orbit on/off', this.OrbitControls);
     this.ThreeService.toggleOrbitControls(this.OrbitControls);
   }
+
+  // ngOnInit(): void {
+  //   console.log('testeeee');
+  //   this.OrbitControls = false;
+  //   this.handleOrbitControls();
+  // }
 }

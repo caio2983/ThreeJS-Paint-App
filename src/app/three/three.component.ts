@@ -43,6 +43,7 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   constructor(private threeService: ThreeServiceService) {}
 
   ngAfterViewInit(): void {
+    this.OrbitControls = false;
     this.newCanvas = this.initThree();
     this.animate();
 
@@ -121,7 +122,6 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   getUvFromMouse(event: MouseEvent): THREE.Vector2 | null {
     // this.renderer.domElement is the <canvas> element
     const rect = this.renderer.domElement.getBoundingClientRect();
-    console.log('rect', rect);
 
     // event.clientX - rect.left means the relative position of mouse x's in the canvas
     // *2-1 , *2+1 convert the mouse click's coordinates to NDC coordinates (normalized device coordinates)
@@ -184,7 +184,6 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.threeService.OrbitControls$.subscribe((OrbitControlss: boolean) => {
       this.OrbitControls = OrbitControlss;
-
       if (this.OrbitControls) {
         // turn on orbit controls
         if (!this.controls) {
@@ -192,6 +191,8 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
             this.camera,
             this.renderer.domElement
           );
+          this.OrbitControls = true;
+          this.controls.enabled = true;
         }
       } else {
         // turn off orbit controls
@@ -232,6 +233,14 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
 
     // starts with orbit controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    // Desliga completamente os controles
+    this.controls.enabled = false;
+
+    // (Opcional) Desliga funcionalidades específicas, se quiser controle mais granular:
+    this.controls.enableRotate = false;
+    this.controls.enableZoom = false;
+    this.controls.enablePan = false;
+    this.controls.enabled = this.OrbitControls;
     this.controls.update();
 
     const light = new THREE.PointLight(0xffffff, 4);
