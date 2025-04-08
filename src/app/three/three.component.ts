@@ -29,7 +29,7 @@ import { BrushServiceService } from '../../services/brush/brush-service.service'
 })
 export class ThreeComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
-  @Input() geometryType: 'sphere' | 'plane' | 'box' | 'ring' = 'sphere';
+  @Input() geometryType: 'sphere' | 'plane' | 'box' | 'ring' | 'oct' = 'sphere';
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -112,7 +112,12 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
         const uv1 = this.getUvFromMouse(eventPrev);
         const uv2 = this.getUvFromMouse(eventCurr);
 
+        // the following removes the possiblity of concentric circunferences around the sphere
         if (uv1 && uv2) {
+          if (Math.abs(uv1.x - uv2.x) > 0.5) {
+            return;
+          }
+
           const prevPos = {
             x: uv1.x * this.newCanvas.width,
             y: (1 - uv1.y) * this.newCanvas.height, // y invertido
@@ -245,7 +250,6 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     ctx.fillRect(0, 0, textureCanvas.width, textureCanvas.height);
     ctx.fillStyle = 'black';
     ctx.font = '48px sans-serif';
-    // ctx.fillText('sphere !!!', 150, 256);
 
     return textureCanvas;
   }
@@ -259,7 +263,11 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
     this.camera.position.z = 3;
 
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvasRef.nativeElement,
+      antialias: true,
+      alpha: true,
+    });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(0xffffff);
 
@@ -268,11 +276,11 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     // Desliga completamente os controles
     this.controls.enabled = false;
 
-    const light = new THREE.PointLight(0xffffff, 4);
+    const light = new THREE.PointLight(0xffffff, 3);
     light.position.set(1, 1, 1);
     this.scene.add(light);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     this.scene.add(ambientLight);
 
     const newCanvas = this.createNewCanvas();
@@ -313,11 +321,13 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.texture.needsUpdate = true;
 
     if (this.animation) {
-      this.mesh.rotation.x += 0.01;
-      this.mesh.rotation.y += 0.01;
+      this.mesh.rotation.x += 0.02;
+      this.mesh.rotation.y += 0.02;
+      this.mesh.rotation.z += 0.02;
     }
 
     this.renderer.render(this.scene, this.camera);
+    this.renderer.setClearColor(new THREE.Color('#8087b3'), 1);
   };
 
   createGeometry(type: string): THREE.BufferGeometry {
@@ -330,6 +340,8 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
         return new THREE.BoxGeometry(1, 1, 1);
       case 'ring':
         return new THREE.RingGeometry(0.8, 1, 32);
+      case 'oct':
+        return new THREE.OctahedronGeometry(1);
       default:
         console.warn(
           `Geometria desconhecida: ${type}, usando Sphere por padrão`
