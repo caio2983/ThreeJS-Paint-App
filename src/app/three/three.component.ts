@@ -164,21 +164,23 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     cx.beginPath();
 
     // we're drawing lines so we need a previous position
-    if (prevPos) {
-      this.controls?.update();
-      // sets the start point
-      cx.moveTo(prevPos.x, prevPos.y); // from
+    if (!this.OrbitControls) {
+      if (prevPos) {
+        this.controls?.update();
+        // sets the start point
+        cx.moveTo(prevPos.x, prevPos.y); // from
 
-      // draws a line from the start pos until the current position
-      cx.lineTo(currentPos.x, currentPos.y);
-      cx.strokeStyle = this.brushColor;
+        // draws a line from the start pos until the current position
+        cx.lineTo(currentPos.x, currentPos.y);
+        cx.strokeStyle = this.brushColor;
 
-      // strokes the current path with the styles we set earlier
-      cx.stroke();
+        // strokes the current path with the styles we set earlier
+        cx.stroke();
 
-      cx.closePath();
+        cx.closePath();
 
-      this.texture.needsUpdate = true;
+        this.texture.needsUpdate = true;
+      }
     }
   }
 
@@ -254,13 +256,6 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     // Desliga completamente os controles
     this.controls.enabled = false;
-
-    // (Opcional) Desliga funcionalidades específicas, se quiser controle mais granular:
-    // this.controls.enableRotate = false;
-    // this.controls.enableZoom = false;
-    // this.controls.enablePan = false;
-    // this.controls.enabled = this.OrbitControls;
-    // this.controls.update();
 
     const light = new THREE.PointLight(0xffffff, 4);
     light.position.set(1, 1, 1);
