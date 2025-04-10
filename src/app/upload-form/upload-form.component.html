@@ -11,7 +11,9 @@
     <div class="geometry-buttons">
       <ng-container *ngFor="let solid of solids">
         <mat-card>
-          <div class="geometry-thumbnail"></div>
+          <div class="geometry-thumbnail">
+            <app-three-thumbnail></app-three-thumbnail>
+          </div>
           <button
             *ngIf="selectedSolid === solid.type; else outlined"
             mat-flat-button
@@ -25,7 +27,9 @@
 
         <ng-template #outlined>
           <mat-card>
-            <div class="geometry-thumbnail"></div>
+            <div class="geometry-thumbnail">
+              <app-three-thumbnail></app-three-thumbnail>
+            </div>
             <button
               mat-stroked-button
               type="button"

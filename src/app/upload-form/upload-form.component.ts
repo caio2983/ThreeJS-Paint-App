@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { ThreeServiceService } from '../../services/three/three-service.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { ThreeThumbnailComponent } from '../three-thumbnail/three-thumbnail.component';
 
 @Component({
   selector: 'app-upload-form',
@@ -16,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
     MatButtonModule,
     NgClass,
     MatCardModule,
+    ThreeThumbnailComponent,
   ],
   templateUrl: './upload-form.component.html',
   styleUrl: './upload-form.component.css',
