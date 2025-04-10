@@ -12,7 +12,9 @@
       <ng-container *ngFor="let solid of solids">
         <mat-card>
           <div class="geometry-thumbnail">
-            <app-three-thumbnail></app-three-thumbnail>
+            <app-three-thumbnail
+              [geometryType]="solid.type"
+            ></app-three-thumbnail>
           </div>
           <button
             *ngIf="selectedSolid === solid.type; else outlined"
@@ -28,7 +30,9 @@
         <ng-template #outlined>
           <mat-card>
             <div class="geometry-thumbnail">
-              <app-three-thumbnail></app-three-thumbnail>
+              <app-three-thumbnail
+                [geometryType]="solid.type"
+              ></app-three-thumbnail>
             </div>
             <button
               mat-stroked-button
