@@ -8,12 +8,36 @@
       Toggle Animation
     </button>
 
-    <button
-      *ngFor="let solid of solids"
-      type="button"
-      (click)="changeSolid(solid.type)"
-    >
-      {{ solid.label }}
-    </button>
+    <div class="geometry-buttons">
+      <ng-container *ngFor="let solid of solids">
+        <mat-card>
+          <div class="geometry-thumbnail"></div>
+          <button
+            *ngIf="selectedSolid === solid.type; else outlined"
+            mat-flat-button
+            class="geo-button"
+            type="button"
+            (click)="changeSolid(solid.type)"
+          >
+            {{ solid.label }}
+          </button>
+        </mat-card>
+
+        <ng-template #outlined>
+          <mat-card>
+            <div class="geometry-thumbnail"></div>
+            <button
+              mat-stroked-button
+              type="button"
+              class="geo-button"
+              (click)="changeSolid(solid.type)"
+              #outlined
+            >
+              {{ solid.label }}
+            </button>
+          </mat-card>
+        </ng-template>
+      </ng-container>
+    </div>
   </div>
 </form>
