@@ -62,6 +62,15 @@ export class ThreeThumbnailComponent implements AfterViewInit, OnDestroy {
     const material = new THREE.MeshStandardMaterial({ color: 0x0077ff });
     this.mesh = new THREE.Mesh(geometry, material);
     this.scene.add(this.mesh);
+
+    this.createGeometricGridBackground();
+  }
+
+  private createGeometricGridBackground(): void {
+    const gridColor = new THREE.Color('midnightblue');
+    const gridHelper = new THREE.GridHelper(10, 20, gridColor, gridColor);
+    gridHelper.rotation.x = Math.PI / 2;
+    this.scene.add(gridHelper);
   }
 
   private animate(): void {
