@@ -266,6 +266,14 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     return textureCanvas;
   }
 
+  private createGeometricGridBackground(): void {
+    const gridColor = new THREE.Color('midnightblue');
+    const gridHelper = new THREE.GridHelper(1000, 1000, gridColor, gridColor);
+    gridHelper.rotation.x = Math.PI / 2;
+    gridHelper.position.z = -5;
+    this.scene.add(gridHelper);
+  }
+
   private initThree(): HTMLCanvasElement {
     const canvas = this.canvasRef.nativeElement;
 
@@ -294,6 +302,8 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     this.scene.add(ambientLight);
+
+    this.createGeometricGridBackground();
 
     const newCanvas = this.createNewCanvas();
 
