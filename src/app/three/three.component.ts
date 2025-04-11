@@ -313,16 +313,11 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
 
     let material: THREE.MeshStandardMaterial;
 
-    if (this.geometryType === 'plane' || this.geometryType === 'ring') {
-      material = new THREE.MeshStandardMaterial({
-        map: this.texture,
-        side: THREE.DoubleSide,
-      });
-    } else {
-      material = new THREE.MeshStandardMaterial({
-        map: this.texture,
-      });
-    }
+    material = new THREE.MeshStandardMaterial({
+      map: this.texture,
+      side: THREE.DoubleSide,
+    });
+
     const geometry = this.createGeometry(this.geometryType);
 
     this.mesh = new THREE.Mesh(geometry, material);

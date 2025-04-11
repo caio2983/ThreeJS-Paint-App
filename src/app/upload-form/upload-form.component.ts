@@ -37,7 +37,7 @@ export class UploadFormComponent {
   solids = [
     { type: 'sphere', label: 'Sphere' },
     { type: 'plane', label: 'Plane' },
-    { type: 'oct', label: 'Octaedro' },
+    { type: 'oct', label: 'Octahedron' },
     { type: 'box', label: 'Box' },
   ];
 
