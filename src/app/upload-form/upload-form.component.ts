@@ -2,9 +2,10 @@ import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 import { NgIf, NgStyle, NgFor, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { ThreeServiceService } from '../../services/three/three-service.service';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ThreeThumbnailComponent } from '../three-thumbnail/three-thumbnail.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-upload-form',
@@ -18,6 +19,7 @@ import { ThreeThumbnailComponent } from '../three-thumbnail/three-thumbnail.comp
     NgClass,
     MatCardModule,
     ThreeThumbnailComponent,
+    MatSlideToggleModule,
   ],
   templateUrl: './upload-form.component.html',
   styleUrl: './upload-form.component.css',

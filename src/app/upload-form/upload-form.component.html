@@ -1,12 +1,14 @@
 <form class="upload-form">
   <div class="buttons">
-    <button type="button" (click)="handleOrbitControls()">
-      Toggle Orbit Controls
-    </button>
+    <p>
+      <mat-slide-toggle (toggleChange)="handleOrbitControls()"
+        ><h3 class="slide-toggle-text">Orbit Controls</h3></mat-slide-toggle
+      >
+    </p>
 
-    <button type="button" (click)="handleToggleAnimation()">
-      Toggle Animation
-    </button>
+    <mat-slide-toggle (toggleChange)="handleToggleAnimation()" checked="true"
+      ><h3 class="slide-toggle-text">Animation</h3></mat-slide-toggle
+    >
 
     <div class="geometry-buttons">
       <ng-container *ngFor="let solid of solids">

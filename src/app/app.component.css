@@ -22,9 +22,18 @@ app-color-select {
 }
 
 .interface {
+  margin-top: 8px;
+  margin-right: 8px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   position: absolute;
   right: 0;
+  max-height: 95%;
+}
+
+mat-panel-title {
+  display: flex;
+  justify-content: center;
+  font-size: larger;
 }

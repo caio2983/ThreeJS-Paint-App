@@ -32,6 +32,14 @@ mat-card {
   position: relative;
 }
 
+.orbit-button {
+  margin-right: 8px;
+}
+
+.slide-toggle-text {
+  margin-left: 4px;
+}
+
 .geometry-thumbnail {
   margin-left: 16px;
   height: 100px;
