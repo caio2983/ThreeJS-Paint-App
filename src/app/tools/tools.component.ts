@@ -44,7 +44,7 @@ export class ToolsComponent {
 
   handleOrbitControls() {
     this.OrbitControls = !this.OrbitControls;
-    console.log('orbitControls true/false', this.OrbitControls);
+
     this.ThreeService.toggleOrbitControls(this.OrbitControls);
   }
 

@@ -56,12 +56,9 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     this.newCanvas = this.initThree();
     this.animate();
 
-    // document.body.appendChild(this.newCanvas);
-
     const newCanvasEl: HTMLCanvasElement = this.newCanvas;
 
     const newCx = newCanvasEl.getContext('2d');
-    console.log('context', newCx);
 
     // set some default properties about the line
     if (newCx) {
@@ -79,7 +76,6 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
 
     fromEvent<MouseEvent>(canvasEl, 'mousedown').subscribe(() => {
       isDrawing = true;
-      console.log('drawing teste');
     });
 
     fromEvent<MouseEvent>(document, 'mouseup').subscribe(() => {
@@ -199,8 +195,6 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('teste plane', new THREE.PlaneGeometry());
-
     this.threeService.Solid$.subscribe((solid: any) => {
       this.geometryType = solid;
 
@@ -215,21 +209,18 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
 
     this.threeService.Animation$.subscribe((Animation: boolean) => {
       this.animation = Animation;
-      console.log('teste animation', this.animation);
     });
 
     this.threeService.OrbitControls$.subscribe((OrbitControlss: boolean) => {
       this.OrbitControls = OrbitControlss;
-      console.log('ligou orbit', this.OrbitControls);
+
       if (this.OrbitControls) {
-        console.log('teste 1,5');
         // turn on orbit controls
 
         this.controls = new OrbitControls(
           this.camera,
           this.renderer.domElement
         );
-        console.log('teste 2');
 
         this.controls.enabled = true;
         this.controls.update();
@@ -238,18 +229,14 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
 
         if (this.controls) {
           this.controls.enabled = false;
-          console.log('teste 3');
         }
       }
-
-      console.log(this.OrbitControls, this.controls, 'testeee');
 
       return;
     });
 
     this.brushService.brushColor$.subscribe((color: string) => {
       this.brushColor = color;
-      console.log('cor setada', this.brushColor);
     });
   }
 

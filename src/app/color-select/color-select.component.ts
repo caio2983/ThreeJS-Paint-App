@@ -15,6 +15,5 @@ export class ColorSelectComponent {
 
   handleColorChange() {
     this.brushService.setBrushColor(this.color);
-    console.log('new color', this.color);
   }
 }
