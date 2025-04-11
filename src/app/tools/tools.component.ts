@@ -1,30 +1,29 @@
-import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
-import { NgIf, NgStyle, NgFor, NgClass } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { NgIf, NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { ThreeServiceService } from '../../services/three/three-service.service';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ThreeThumbnailComponent } from '../three-thumbnail/three-thumbnail.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
-  selector: 'app-upload-form',
+  selector: 'app-tools',
   imports: [
     NgIf,
     DragDropModule,
-    CdkDrag,
-    NgStyle,
+
     NgFor,
     MatButtonModule,
-    NgClass,
+
     MatCardModule,
     ThreeThumbnailComponent,
     MatSlideToggleModule,
   ],
-  templateUrl: './upload-form.component.html',
-  styleUrl: './upload-form.component.css',
+  templateUrl: './tools.component.html',
+  styleUrl: './tools.component.css',
 })
-export class UploadFormComponent {
+export class ToolsComponent {
   OrbitControls: boolean = false;
   animation: boolean = true;
   uploadStatus: number | undefined;
